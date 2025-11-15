@@ -1,0 +1,60 @@
+/* static/css/styles.css */
+
+/* Color tokens (bubblegum pink, peach sherbet, sunshine puff) */
+/* We'll use Tailwind classes for most styling; add lightweight CSS for animation/behaviour. */
+
+:root{
+    --bubblegum: #ff7fbf;   /* pink */
+    --peach: #ffd1b2;      /* peach sherbet */
+    --sunshine: #fff8b5;   /* sunshine puff */
+  }
+
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+#hero-bg1 {
+    opacity: 1; /* first image visible */
+}
+
+
+
+  /* small card transition polish */
+  #previewBox,
+  #resultCenter,
+  #uploadBox {
+    transition: all 450ms cubic-bezier(.2,.8,.2,1);
+  }
+  
+  /* Make form/input look nicer across browsers */
+  input[type=file] {
+    outline: none;
+  }
+  
+  /* Breed info loader (spinner + text) */
+#breedLoader {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0;
+    transform: translateY(-5px);
+}
+
+#breedLoader.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+  /* Ensure footer visible and page scrollable */
+  html,body {
+    height: auto;
+    min-height: 100%;
+    overflow-y: auto;
+  }
+  /* When preview appears, we want a wider layout */
+.section-expanded {
+  max-height: 1000px; /* smoothly expands */
+}

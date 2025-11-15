@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="w-full flex justify-center mt-6">
+  <div class="relative w-11/12 lg:w-4/5 h-72 md:h-96 rounded-2xl overflow-hidden shadow-lg">
+
+      <!-- Slideshow layers -->
+      <div id="hero-bg1" class="hero-slide"></div>
+      <div id="hero-bg2" class="hero-slide"></div>
+
+      <!-- Overlay text -->
+      <div class="absolute inset-0 flex flex-col justify-center items-center text-center px-4 bg-black/20">
+          <h1 class="text-white text-3xl md:text-5xl font-bold drop-shadow-lg">
+              WELCOME TO DOG BREED PREDICTOR
+          </h1>
+          <p class="text-white text-lg md:text-xl mt-3 font-medium drop-shadow">
+              Supports Predictions For:
+              <span class="font-semibold">
+                  Scottish Deerhound, Entlebucher, Bernese Mountain Dog
+              </span>
+          </p>
+      </div>
+
+  </div>
+</div>
+
+<section class="bg-white/80 backdrop-blur-md rounded-2xl p-8 shadow-lg border-white/50 mt-10">
+  <div id="mainContainer" class="flex flex-col md:flex-row items-center justify-center gap-8 px-20">
+    <!-- Upload (centered initially) -->
+    <form id="uploadBox" method="POST" enctype="multipart/form-data"
+      class="w-full md:w-96 flex flex-col items-center gap-3 p-6 rounded-xl shadow-md border mx-auto bg-[#feffef]">
+  {% csrf_token %}
+  <label for="dog_image" class="text-lg font-semibold" id="uploadLabel">Upload Dog Image</label>
+
+  <p class="text-sm text-gray-600 font-medium text-center px-4">Accepted: JPG/PNG — front-facing clear photos give best predictions.</p>
+
+  <!-- centered file input wrapper -->
+  <div class="w-full flex flex-col items-center">
+    <input id="dog_image" name="dog_image" type="file" accept="image/*"
+          class="w-full text-sm file:ml-12 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border file:border-gray-200 file:bg-white file:text-black cursor-pointer text-center" required>
+          <p id="fileName" class="text-xs text-black"></p>
+  </div>
+
+  <div class="flex gap-3 mt-2 justify-center w-full">
+    <div id="predictLoader" class="hidden flex items-center gap-2">
+      <div class="w-8 h-8 border-4 border-gray-200 border-l-pink-500 rounded-full animate-spin"></div>
+      <p class="text-sm text-pink-500 font-medium">Predicting...</p>
+    </div>
+    <button id="predictBtn" type="button" class="bg-pink-500 hover:bg-pink-600 text-white font-semibold px-5 py-2 rounded-full">
+      Predict Breed
+    </button>
+
+    <button id="resetBtn" type="button" class="hidden bg-gray-600 border-0 text-white px-4 py-2 rounded-full">
+      Reset
+    </button>
+  </div>
+</form>
+
+
+    <!-- Preview (hidden initially) -->
+  <div id="previewBox" class="hidden w-full md:w-96 flex flex-col items-center gap-3 p-3 rounded-xl shadow-md border pointer-events-none transform translate-y-4 bg-[#feffef]">
+    <img id="preview" data-placeholder="{% static 'images/placeholder.png' %}" src="{% static 'images/placeholder.png' %}" alt="preview" class="h-64 object-cover rounded-lg border">
+  </div>
+</div>
+
+  <!-- Result area for AJAX or after page reload (kept centered below both boxes) -->
+  <div id="resultCenter" class="hidden max-w-md w-full md:w-96 mx-auto mt-8 pointer-events-none transform translate-y-4">
+    <!-- when backend re-renders page with breed, make visible -->
+    <div class="bg-pink-50 p-6 rounded-xl border shadow-md text-center min-w-[280px] min-h-[180px] mt-6 flex flex-col items-center justify-center">
+      <p id="breedName" class="text-2xl font-bold text-[#4d2375]"></p>
+      <p id="confidence" class="mt-1 font-semibold text-sm text-gray-500"></p>
+      <p id="lowConfidenceNote" 
+      class="hidden text-red-600 bg-red-50 border border-red-300 rounded-lg px-4 py-2 text-sm font-medium mt-3">
+      </p>
+      <div class="mt-4 flex flex-col items-center justify-center gap-3">
+        <div id="breedLoader" class="hidden flex items-center gap-2">
+          <div class="w-8 h-8 border-4 border-gray-200 border-l-green-500 rounded-full animate-spin"></div>
+          <p class="text-sm text-green-500 font-medium">Generating breed info...</p>
+        </div>
+        <button id="knowMore2" class="bg-green-500 text-white px-4 py-2 rounded-full">About the Breed</button>
+      </div>
+    </div>
+  </div>
+  <div id="breedDescription" class="hidden mt-4 mb-8 p-12 rounded-lg bg-pink-50 shadow-md max-w-2xl mx-auto transition-all duration-500 ease-in-out opacity-0 transform -translate-y-2">
+    <p id="breedDescText" class="text-base font-semibold leading-relaxed mb-3"></p>
+    <a id="breedWikiLink" href="#" target="_blank" class="text-blue-600 font-semibold underline hover:text-blue-700">
+      Find more here...</a>
+  </div>
+</section>
+
+{% endblock %}

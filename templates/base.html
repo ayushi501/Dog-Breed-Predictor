@@ -1,0 +1,57 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dog Breed Predictor</title>
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Icons (optional) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+  <link rel="shortcut icon" href="{% static 'images/title_icon.ico' %}" type="image/x-icon">
+
+
+  <!-- Custom styles -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+  <!-- preloading slideshow-image -->
+  <link rel="preload" as="image" href="{% static 'img/dog4.jpg' %}">
+  <meta name="csrf-token" content="{{ csrf_token }}">
+</head>
+<body class="relative bg-gradient-to-b from-pink-50 via-peach-50 to-yellow-50 text-gray-900">
+
+
+  <!-- Navbar -->
+  <nav class="w-full bg-white/60 backdrop-blur-md border-b border-white/30">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <span class="text-3xl">🐶</span>
+        <h1 class="text-3xl font-extrabold tracking-tight" style="background: linear-gradient(90deg,#4d2375,#8b60b5); -webkit-background-clip: text; color: transparent;">
+          Dog Breed Predictor
+        </h1>
+      </div>
+    </div>
+  </nav>
+  
+
+  <!-- Main (not vertically forcing center so page scrolls normally) -->
+  <main class="py-10">
+    <div class="max-w-6xl mx-auto px-6">
+      {% block content %}{% endblock %}
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full bg-white/60 backdrop-blur-sm border-t border-white/30">
+    <div class="max-w-4xl mx-auto px-6 py-8 text-center text-gray-700">
+      <h3 class="font-semibold text-lg text-gray-500">About the project</h3>
+      <p class="mt-2 text-sm">Built with Django • TensorFlow • Tailwind CSS. Made with ❤️ by <span class="font-semibold">Ayushi Singh</span></p>
+    </div>
+  </footer>
+
+  <!-- JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>
