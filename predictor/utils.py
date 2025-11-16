@@ -4,11 +4,20 @@ from tensorflow.keras.preprocessing import image
 import os
 
 MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'dog_breed_predictor.keras')
-model = load_model(MODEL_PATH)
+
+model = None
+
+def get_model():
+    global model
+    if model is None:
+        model = load_model(MODEL_PATH)
+    return model
 
 BREEDS = ['scottish_deerhound', 'entlebucher', 'bernese_mountain_dog']
 
 def predict_breed(img_path):
+    model = get_model()
+    
     img = image.load_img(img_path, target_size = (224, 224))
     x = image.img_to_array(img)
     x = np.expand_dims(x, axis=0)
