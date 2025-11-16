@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: Dog-Breed-Predictor
+    env: python
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn DogBreedPrediction.wsgi:application"
+    pythonVersion: 3.10.14
