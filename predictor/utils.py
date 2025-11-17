@@ -1,34 +1,30 @@
 import numpy as np
-from PIL import Image
+from tensorflow.keras.models import load_model
+from tensorflow.keras.preprocessing import image
 import os
-import tflite_runtime.interpreter as tflite
 
-MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'model.tflite')
+MODEL_PATH = os.path.join(os.path.dirname(__file__), '..', 'dog_breed_predictor.keras')
 
-# Initialize TFLite interpreter
-interpreter = tflite.Interpreter(model_path=MODEL_PATH)
-interpreter.allocate_tensors()
-input_details = interpreter.get_input_details()
-output_details = interpreter.get_output_details()
+model = None
 
-# List of dog breeds (keep same as your model)
+def get_model():
+    global model
+    if model is None:
+        model = load_model(MODEL_PATH)
+    return model
+
 BREEDS = ['scottish_deerhound', 'entlebucher', 'bernese_mountain_dog']
 
 def predict_breed(img_path):
-    # Load and preprocess image
-    img = Image.open(img_path).resize((224, 224))  # same target size as training
-    x = np.array(img, dtype=np.float32)
-    x = x / 255.0  # normalize
-    x = np.expand_dims(x, axis=0)  # add batch dimension
+    model = get_model()
+    
+    img = image.load_img(img_path, target_size = (224, 224))
+    x = image.img_to_array(img)
+    x = np.expand_dims(x, axis=0)
+    x = x/255.0
 
-    # Set input tensor
-    interpreter.set_tensor(input_details[0]['index'], x)
-    interpreter.invoke()
+    preds = model.predict(x)
+    predicted_breed = BREEDS[np.argmax(preds)]
+    confidence = np.max(preds)
 
-    # Get prediction
-    output_data = interpreter.get_tensor(output_details[0]['index'])
-    predicted_index = np.argmax(output_data)
-    confidence = float(np.max(output_data))
-
-    predicted_breed = BREEDS[predicted_index]
-    return predicted_breed, round(confidence, 2)
+    return predicted_breed, round(float(confidence), 2)
